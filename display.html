@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Information | Details</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="container">
+    <div class="card">
+      <header class="card-header">
+        <div class="badge">Submitted Details</div>
+        <h1>User Profile</h1>
+        <p>Review the captured information below.</p>
+      </header>
+
+      <div id="contentArea">
+        <!-- Rendered via JavaScript -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+          <p>No user data found.</p>
+          <a href="index.html" class="btn btn-primary">Go to Form</a>
+        </div>
+
+        <div id="detailsCard" style="display: none;">
+          <dl class="details-list">
+            <div class="detail-item">
+              <dt>Full Name</dt>
+              <dd id="displayName">-</dd>
+            </div>
+
+            <div class="detail-item">
+              <dt>Gender</dt>
+              <dd id="displayGender">-</dd>
+            </div>
+
+            <div class="detail-item">
+              <dt>Mobile Number</dt>
+              <dd id="displayMobile">-</dd>
+            </div>
+
+            <div class="detail-item">
+              <dt>Email ID</dt>
+              <dd id="displayEmail">-</dd>
+            </div>
+
+            <div class="detail-item">
+              <dt>City</dt>
+              <dd id="displayCity">-</dd>
+            </div>
+
+            <div class="detail-item">
+              <dt>State</dt>
+              <dd id="displayState">-</dd>
+            </div>
+
+            <div class="detail-item">
+              <dt>Country</dt>
+              <dd id="displayCountry">-</dd>
+            </div>
+          </dl>
+
+          <footer class="display-actions">
+            <a href="index.html" class="btn btn-secondary">&larr; Back to Form</a>
+            <button onclick="window.print()" class="btn btn-primary">Print Details</button>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Extract user details using JavaScript
+    function getUserData() {
+      const params = new URLSearchParams(window.location.search);
+      
+      // 1. Check if parameters exist in URL query string
+      if (params.has('name') || params.has('email')) {
+        return {
+          name: params.get('name') || '',
+          gender: params.get('gender') || '',
+          mobile: params.get('mobile') || '',
+          email: params.get('email') || '',
+          city: params.get('city') || '',
+          state: params.get('state') || '',
+          country: params.get('country') || ''
+        };
+      }
+
+      // 2. Fallback to localStorage if no URL query params
+      try {
+        const stored = localStorage.getItem('latestUserData');
+        if (stored) {
+          return JSON.parse(stored);
+        }
+      } catch (err) {
+        console.warn('Could not read from localStorage:', err);
+      }
+
+      return null;
+    }
+
+    // Render data onto the page using JavaScript DOM manipulation
+    function renderUserDetails() {
+      const data = getUserData();
+      const emptyState = document.getElementById('emptyState');
+      const detailsCard = document.getElementById('detailsCard');
+
+      if (!data || !data.name) {
+        emptyState.style.display = 'block';
+        detailsCard.style.display = 'none';
+        return;
+      }
+
+      document.getElementById('displayName').textContent = data.name;
+      document.getElementById('displayGender').textContent = data.gender || 'Not specified';
+      document.getElementById('displayMobile').textContent = data.mobile || '-';
+      document.getElementById('displayEmail').textContent = data.email || '-';
+      document.getElementById('displayCity').textContent = data.city || '-';
+      document.getElementById('displayState').textContent = data.state || '-';
+      document.getElementById('displayCountry').textContent = data.country || '-';
+
+      emptyState.style.display = 'none';
+      detailsCard.style.display = 'block';
+    }
+
+    // Run when the DOM is loaded
+    document.addEventListener('DOMContentLoaded', renderUserDetails);
+  </script>
+</body>
+</html>

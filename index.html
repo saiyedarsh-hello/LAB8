@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Information Form</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="container">
+    <div class="card">
+      <header class="card-header">
+        <h1>User Information</h1>
+        <p>Please enter your details below to submit your information.</p>
+      </header>
+
+      <form id="userForm" action="display.html" method="GET">
+        <!-- Full Name -->
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            placeholder="e.g. Alex Morgan" 
+            required
+            autocomplete="name"
+          >
+        </div>
+
+        <!-- Gender -->
+        <div class="form-group">
+          <label class="group-label">Gender</label>
+          <div class="radio-group" role="radiogroup" aria-label="Gender">
+            <label class="radio-label">
+              <input type="radio" name="gender" value="Male" required>
+              <span>Male</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="gender" value="Female">
+              <span>Female</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="gender" value="Other">
+              <span>Other</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Contact Information Row -->
+        <div class="form-row">
+          <!-- Mobile Number -->
+          <div class="form-group">
+            <label for="mobile">Mobile Number</label>
+            <input 
+              type="tel" 
+              id="mobile" 
+              name="mobile" 
+              placeholder="e.g. 9876543210" 
+              pattern="[0-9]{10}"
+              title="Please enter a valid 10-digit mobile number" 
+              required
+              autocomplete="tel"
+            >
+          </div>
+
+          <!-- Email ID -->
+          <div class="form-group">
+            <label for="email">Email ID</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              placeholder="e.g. alex@example.com" 
+              required
+              autocomplete="email"
+            >
+          </div>
+        </div>
+
+        <!-- Location Information -->
+        <div class="form-row form-row-3">
+          <!-- City -->
+          <div class="form-group">
+            <label for="city">City</label>
+            <input 
+              type="text" 
+              id="city" 
+              name="city" 
+              placeholder="e.g. Chicago" 
+              required
+              autocomplete="address-level2"
+            >
+          </div>
+
+          <!-- State -->
+          <div class="form-group">
+            <label for="state">State</label>
+            <input 
+              type="text" 
+              id="state" 
+              name="state" 
+              placeholder="e.g. Illinois" 
+              required
+              autocomplete="address-level1"
+            >
+          </div>
+
+          <!-- Country -->
+          <div class="form-group">
+            <label for="country">Country</label>
+            <input 
+              type="text" 
+              id="country" 
+              name="country" 
+              placeholder="e.g. USA" 
+              required
+              autocomplete="country-name"
+            >
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Reset</button>
+          <button type="submit" class="btn btn-primary">Submit Details &rarr;</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    // Save to localStorage as a backup when form is submitted
+    document.getElementById('userForm').addEventListener('submit', function(e) {
+      const formData = new FormData(this);
+      const data = {
+        name: formData.get('name'),
+        gender: formData.get('gender'),
+        mobile: formData.get('mobile'),
+        email: formData.get('email'),
+        city: formData.get('city'),
+        state: formData.get('state'),
+        country: formData.get('country'),
+        submittedAt: new Date().toLocaleString()
+      };
+      
+      // Store in localStorage for cross-page persistence
+      try {
+        localStorage.setItem('latestUserData', JSON.stringify(data));
+      } catch (err) {
+        console.warn('Storage error:', err);
+      }
+    });
+  </script>
+</body>
+</html>
